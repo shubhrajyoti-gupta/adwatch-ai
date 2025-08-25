@@ -1,18 +1,6 @@
 # Welcome to your Lovable project
 
-## Project info
-
-**URL**: https://lovable.dev/projects/80016846-d88a-44db-b679-fdbcb03d4b6f
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/80016846-d88a-44db-b679-fdbcb03d4b6f) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+##Project Info
 
 **Use your preferred IDE**
 
@@ -60,14 +48,86 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## 🚀 Deployment Approach
 
-Simply open [Lovable](https://lovable.dev/projects/80016846-d88a-44db-b679-fdbcb03d4b6f) and click on Share -> Publish.
+1. Frontend (Next.js) → Deploy on Vercel
 
-## Can I connect a custom domain to my Lovable project?
+Fork or clone the repo.
 
-Yes, you can!
+In the root directory, check if there’s a Next.js app (likely in /client or root).
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Push it to your own GitHub repo.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Go to Vercel Dashboard
+.
+
+Click New Project → Import GitHub Repo.
+
+Choose the repo → Configure project:
+
+Framework: Next.js (Vercel will auto-detect).
+
+Build command: npm run build (default).
+
+Output directory: .next.
+
+Add required environment variables (e.g., API URLs for backend).
+
+Deploy → you get a https://your-app.vercel.app domain.
+
+2. Backend (Flask API) → Deploy Separately
+
+Vercel doesn’t support long-running Python APIs. Options:
+
+Render.com (free tier) – Easiest.
+
+Railway.app / Heroku – Good alternatives.
+
+AWS / GCP / Azure – If you need scale.
+
+Steps (for Render as example):
+
+Create a new repo with just the Flask backend code (/server folder).
+
+Add requirements.txt and Procfile:
+
+web: gunicorn app:app
+
+
+Push to GitHub.
+
+On Render
+, create a Web Service, connect the repo.
+
+Set runtime = Python 3.x.
+
+Deploy → you get https://your-backend.onrender.com.
+
+3. Connect Frontend to Backend
+
+In the Next.js frontend, update the API base URL:
+
+const API_URL = "https://your-backend.onrender.com";
+
+
+Add this as an environment variable in Vercel (NEXT_PUBLIC_API_URL).
+
+Redeploy frontend.
+
+4. Test Flow
+
+Open frontend (Vercel URL).
+
+Upload image / click detection → API call goes to Flask backend.
+
+Backend processes → returns result.
+
+Frontend displays violation info.
+
+⚡ End Result:
+
+Frontend → Vercel (fast, global edge deployment).
+
+Backend → Render/Railway/Heroku (Python API hosting).
+
+They talk over REST API.
